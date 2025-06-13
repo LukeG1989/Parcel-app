@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parcel Management App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background-color: #073570;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 5px;
+      border: 1px solid white;
+      background-color: #05264e;
+      color: white;
+    }
+    button {
+      background-color: white;
+      color: #073570;
+      font-weight: bold;
+      border: none;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .screen {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+    .btn-tile {
+      display: block;
+      margin: 10px 0;
+      padding: 14px;
+      text-align: center;
+      background-color: white;
+      color: #073570;
+      border: none;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="loginScreen" class="screen active">
+      <h2>Login</h2>
+      <input type="text" placeholder="Username" id="username">
+      <input type="password" placeholder="Password" id="password">
+      <button onclick="goToScreen('indexScreen')">Login</button>
+    </div>
+
+    <div id="indexScreen" class="screen">
+      <h2>Select Parcel Type</h2>
+      <button class="btn-tile" onclick="goToScreen('whoForScreen')">New Parcel Entry</button>
+      <button class="btn-tile" onclick="goToScreen('arrivalScreen')">Parcel Arrival</button>
+      <button class="btn-tile" onclick="goToScreen('returnStorageScreen')">Return to Storage</button>
+      <button class="btn-tile" onclick="goToScreen('returnCollectionScreen')">Return Collection</button>
+    </div>
+
+    <div id="whoForScreen" class="screen">
+      <h2>Who is the Parcel For?</h2>
+      <button class="btn-tile" onclick="goToScreen('eventEntryScreen')">Event</button>
+      <button class="btn-tile" onclick="goToScreen('guestParcelScreen')">Guest</button>
+      <button class="btn-tile" onclick="goToScreen('teamParcelScreen')">Team Department</button>
+      <button class="btn-tile" onclick="goToScreen('deptParcelScreen')">Hotel Dept Collection</button>
+      <button onclick="goToScreen('indexScreen')">Back</button>
+    </div>
+
+    <div id="eventEntryScreen" class="screen">
+      <h2>Event Parcel Entry</h2>
+      <input placeholder="Event Name" id="eventName">
+      <input type="date" id="eventDate">
+      <input placeholder="Client Name" id="clientName">
+      <input placeholder="Client Contact" id="clientContact">
+      <input type="number" placeholder="Number of Parcels" id="parcelCount">
+      <input placeholder="Description of Parcels" id="parcelDescription">
+      <input type="date" id="expectedDate" placeholder="Expected Delivery Date">
+      <select id="returnPlanned" onchange="toggleReturnFields()">
+        <option value="">Return Planned?</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+      <div id="returnFields" style="display:none;">
+        <input type="date" id="collectionDate" placeholder="Expected Collection Date">
+        <input placeholder="Courier Name" id="courierName">
+        <input placeholder="Tracking Details" id="trackingDetails">
+      </div>
+      <button onclick="submitForm('eventEntryScreen')">Submit</button>
+      <button onclick="goToScreen('whoForScreen')">Back</button>
+    </div>
+
+    <div id="guestParcelScreen" class="screen">
+      <h2>Guest Parcel Entry</h2>
+      <input placeholder="Guest Name" id="guestName">
+      <input type="date" id="guestArrivalDate">
+      <input type="number" placeholder="Number of Parcels" id="guestParcelCount">
+      <input placeholder="Bedroom (if known)" id="guestRoom">
+      <select id="guestLocation">
+        <option>Luggage store</option>
+        <option>Behind Reception</option>
+        <option>DM Safe</option>
+        <option>Custom Location</option>
+      </select>
+      <input type="file" id="guestPhoto">
+      <select id="guestCondition">
+        <option>Good</option>
+        <option>Damaged</option>
+        <option>Unknown</option>
+      </select>
+      <button onclick="submitForm('guestParcelScreen')">Submit</button>
+      <button onclick="goToScreen('whoForScreen')">Back</button>
+    </div>
+
+    <div id="teamParcelScreen" class="screen">
+      <h2>Team Parcel Entry</h2>
+      <input placeholder="For Attention of" id="teamMember">
+      <select id="teamLocation">
+        <option>HR Office</option>
+        <option>12th Floor Sales Office</option>
+        <option>GM Office</option>
+        <option>Behind Reception</option>
+        <option>Reception Luggage Store</option>
+        <option>Custom Location</option>
+      </select>
+      <input type="file" id="teamPhoto">
+      <input placeholder="Courier (if known)" id="teamCourier">
+      <input placeholder="Tracking Details" id="teamTracking">
+      <input placeholder="Hotel Contact" id="hotelContact">
+      <button onclick="submitForm('teamParcelScreen')">Submit</button>
+      <button onclick="goToScreen('whoForScreen')">Back</button>
+    </div>
+
+    <div id="deptParcelScreen" class="screen">
+      <h2>Hotel Department Collection</h2>
+      <input placeholder="Person Sending Parcel" id="sender">
+      <input placeholder="Department" id="sendingDept">
+      <select id="collectionLocation">
+        <option>Reception Luggage Store</option>
+        <option>Behind Reception</option>
+        <option>Stores Office</option>
+        <option>Other</option>
+      </select>
+      <input type="file" id="deptPhoto">
+      <input placeholder="Tracking Details" id="deptTracking">
+      <button onclick="submitForm('deptParcelScreen')">Submit</button>
+      <button onclick="goToScreen('whoForScreen')">Back</button>
+    </div>
+
+    <div id="arrivalScreen" class="screen">
+      <h2>Parcel Arrival</h2>
+      <input placeholder="Event Name (if expected)" id="arrivalEventName">
+      <input type="date" id="arrivalDate">
+      <select id="arrivalStorage">
+        <option>1st floor Cupboard nr Orkney</option>
+        <option>1st Floor AV cupboard</option>
+        <option>12th Floor Sales Office</option>
+        <option>Stores Office</option>
+        <option>Reception Luggage Store</option>
+        <option>Behind Reception</option>
+        <option>HR Office</option>
+        <option>Other</option>
+      </select>
+      <input type="file" id="arrivalPhoto">
+      <input placeholder="Received By" id="receivedBy">
+      <button onclick="submitForm('arrivalScreen')">Submit</button>
+      <button onclick="goToScreen('indexScreen')">Back</button>
+    </div>
+
+    <div id="returnStorageScreen" class="screen">
+      <h2>Return to Storage</h2>
+      <input placeholder="Event Name" id="returnEventName">
+      <input type="date" id="returnDate">
+      <input placeholder="Reason for Return" id="returnReason">
+      <select id="returnStorageLocation">
+        <option>Reception Luggage Store</option>
+        <option>Behind Reception</option>
+        <option>Stores Office</option>
+        <option>Other</option>
+      </select>
+      <input type="file" id="returnPhoto">
+      <select id="returnCondition">
+        <option>Good</option>
+        <option>Damaged</option>
+        <option>Unknown</option>
+      </select>
+      <button onclick="submitForm('returnStorageScreen')">Submit</button>
+      <button onclick="goToScreen('indexScreen')">Back</button>
+    </div>
+
+    <div id="returnCollectionScreen" class="screen">
+      <h2>Return Collection</h2>
+      <input placeholder="Event/Guest/Team" id="returnClient">
+      <input type="date" id="collectionDateFinal">
+      <select id="collectionLocationFinal">
+        <option>Reception Luggage Store</option>
+        <option>Behind Reception</option>
+        <option>HR Office</option>
+        <option>Other</option>
+      </select>
+      <input type="file" id="collectionPhoto">
+      <select id="collectionCondition">
+        <option>Good</option>
+        <option>Damaged</option>
+        <option>Unknown</option>
+      </select>
+      <button onclick="submitForm('returnCollectionScreen')">Submit</button>
+      <button onclick="goToScreen('indexScreen')">Back</button>
+    </div>
+  </div>
+
+  
+  <script>
+    function goToScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function toggleReturnFields() {
+      const returnPlanned = document.getElementById("returnPlanned").value;
+      document.getElementById("returnFields").style.display = returnPlanned === "Yes" ? "block" : "none";
+    }
+
+    function submitForm(screenId) {
+      const data = { screen: screenId };
+      document.querySelectorAll(`#${screenId} input, #${screenId} select`).forEach(el => {
+        if (el.type === "file") return;
+        data[el.id] = el.value;
+      });
+
+      fetch("https://script.google.com/macros/s/AKfycbzlg2qVRQ9Ry1QBWdpjPUMX1DnFC78pNBlTHNTXDhaLSZhJwWwMqHD0NXn-VUP3y0KA/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.text())
+      .then(result => {
+        alert("Submitted successfully!\nResponse: " + result);
+        goToScreen("indexScreen");
+      })
+      .catch(error => {
+        alert("Submission failed: " + error);
+      });
+    }
+  </script>
+
+</body>
+</html>
