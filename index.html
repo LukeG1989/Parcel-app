@@ -58,6 +58,7 @@
       <input type="password" id="password" placeholder="Password" />
       <button onclick="goToScreen('indexScreen')">Login</button>
     </div>
+
     <div id="indexScreen" class="screen">
       <h2>Main Menu</h2>
       <button onclick="goToScreen('whoForScreen')">New Parcel Entry</button>
@@ -65,6 +66,7 @@
       <button onclick="goToScreen('returnStorageScreen')">Return to Storage</button>
       <button onclick="goToScreen('returnCollectionScreen')">Return Collection</button>
     </div>
+
     <div id="whoForScreen" class="screen">
       <h2>Who is the Parcel For?</h2>
       <button onclick="goToScreen('eventEntryScreen')">Event</button>
@@ -73,19 +75,131 @@
       <button onclick="goToScreen('deptParcelScreen')">Hotel Dept Collection</button>
       <button onclick="goToScreen('indexScreen')">Back</button>
     </div>
-    <!-- Additional screens trimmed for brevity -->
+
+    <!-- Event Entry Screen -->
+    <div id="eventEntryScreen" class="screen">
+      <h2>Event Parcel Entry</h2>
+      <input id="eventName" placeholder="Event Name" />
+      <input type="date" id="eventDate" />
+      <input id="clientName" placeholder="Client Contact Name" />
+      <input id="clientContact" placeholder="Client Phone Number" />
+      <input id="parcelCount" type="number" placeholder="Number of Parcels" />
+      <input id="parcelDescription" placeholder="Parcel Description" />
+      <input id="expectedDate" type="date" placeholder="Expected Delivery Date" />
+      <select id="returnPlanned" onchange="toggleReturnFields()">
+        <option value="">Return Planned?</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+      <div id="returnFields" style="display:none;">
+        <input type="date" id="collectionDate" placeholder="Expected Collection Date" />
+        <input id="courierName" placeholder="Courier Name" />
+        <input id="trackingDetails" placeholder="Tracking Details" />
+      </div>
+      <button onclick="submitForm('eventEntryScreen')">Submit</button>
+      <button onclick="goToScreen('whoForScreen')">Back</button>
+    </div>
+
+    <!-- Guest Parcel -->
+    <div id="guestParcelScreen" class="screen">
+      <h2>Guest Parcel</h2>
+      <input id="guestName" placeholder="Guest Name" />
+      <input type="date" id="guestArrivalDate" placeholder="Expected Arrival Date" />
+      <input id="guestParcelCount" type="number" placeholder="Number of Parcels" />
+      <input id="guestRoom" placeholder="Bedroom (if known)" />
+      <input id="guestLocation" placeholder="Location of Parcel" />
+      <input type="file" id="guestPhoto" />
+      <input id="guestCondition" placeholder="Condition" />
+      <button onclick="submitForm('guestParcelScreen')">Submit</button>
+      <button onclick="goToScreen('whoForScreen')">Back</button>
+    </div>
+
+    <!-- Team Parcel -->
+    <div id="teamParcelScreen" class="screen">
+      <h2>Team Department Parcel</h2>
+      <input id="teamMember" placeholder="Team Member Name" />
+      <input id="teamLocation" placeholder="Location of Parcel" />
+      <input type="file" id="teamPhoto" />
+      <input id="teamCourier" placeholder="Courier" />
+      <input id="teamTracking" placeholder="Tracking Details" />
+      <input id="hotelContact" placeholder="Hotel Contact" />
+      <button onclick="submitForm('teamParcelScreen')">Submit</button>
+      <button onclick="goToScreen('whoForScreen')">Back</button>
+    </div>
+
+    <!-- Department Collection -->
+    <div id="deptParcelScreen" class="screen">
+      <h2>Hotel Department Collection</h2>
+      <input id="sender" placeholder="Sender Name" />
+      <input id="sendingDept" placeholder="Sending Department" />
+      <input id="collectionLocation" placeholder="Parcel Location" />
+      <input type="file" id="deptPhoto" />
+      <input id="deptTracking" placeholder="Tracking Details" />
+      <button onclick="submitForm('deptParcelScreen')">Submit</button>
+      <button onclick="goToScreen('whoForScreen')">Back</button>
+    </div>
+
+    <!-- Parcel Arrival -->
+    <div id="arrivalScreen" class="screen">
+      <h2>Parcel Arrival</h2>
+      <input id="arrivalEventName" placeholder="Event Name" />
+      <input type="date" id="arrivalDate" />
+      <input id="arrivalStorage" placeholder="Storage Location" />
+      <input type="file" id="arrivalPhoto" />
+      <input id="receivedBy" placeholder="Received By" />
+      <button onclick="submitForm('arrivalScreen')">Submit</button>
+      <button onclick="goToScreen('indexScreen')">Back</button>
+    </div>
+
+    <!-- Return to Storage -->
+    <div id="returnStorageScreen" class="screen">
+      <h2>Return to Storage</h2>
+      <input id="returnEventName" placeholder="Event Name" />
+      <input type="date" id="returnDate" />
+      <input id="returnReason" placeholder="Reason for Return" />
+      <input id="returnStorageLocation" placeholder="Storage Location" />
+      <input type="file" id="returnPhoto" />
+      <input id="returnCondition" placeholder="Condition" />
+      <button onclick="submitForm('returnStorageScreen')">Submit</button>
+      <button onclick="goToScreen('indexScreen')">Back</button>
+    </div>
+
+    <!-- Return Collection -->
+    <div id="returnCollectionScreen" class="screen">
+      <h2>Return Collection</h2>
+      <input id="returnClient" placeholder="Client or Dept Name" />
+      <input type="date" id="collectionDateFinal" />
+      <input id="collectionLocationFinal" placeholder="Location" />
+      <input type="file" id="collectionPhoto" />
+      <input id="collectionCondition" placeholder="Condition" />
+      <button onclick="submitForm('returnCollectionScreen')">Submit</button>
+      <button onclick="goToScreen('indexScreen')">Back</button>
+    </div>
   </div>
+
   <script>
     function goToScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+      const screen = document.getElementById(id);
+      if (screen) {{
+        screen.classList.add('active');
+      }} else {{
+        alert("Screen not found: " + id);
+      }}
     }
+
+    function toggleReturnFields() {
+      const returnPlanned = document.getElementById("returnPlanned").value;
+      document.getElementById("returnFields").style.display = returnPlanned === "Yes" ? "block" : "none";
+    }
+
     function submitForm(screenId) {
       const data = { screen: screenId };
       document.querySelectorAll(`#${screenId} input, #${screenId} select`).forEach(el => {
         if (el.type === "file") return;
         data[el.id] = el.value;
       });
+
       fetch("https://script.google.com/macros/s/AKfycbzlg2qVRQ9Ry1QBWdpjPUMX1DnFC78pNBlTHNTXDhaLSZhJwWwMqHD0NXn-VUP3y0KA/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
