@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parcel Management App</title>
+  <style>
+    body {
+      background-color: white;
+      color: #073570;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    input, select, textarea {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 5px;
+      border: 1px solid #073570;
+      background-color: #f0f4fa;
+      color: #073570;
+    }
+    button {
+      background-color: #073570;
+      color: white;
+      padding: 12px;
+      border: none;
+      width: 100%;
+      margin: 10px 0;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .screen {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="loginScreen" class="screen active">
+      <h2>Login</h2>
+      <input id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="goToScreen('indexScreen')">Login</button>
+    </div>
+    <div id="indexScreen" class="screen">
+      <h2>Main Menu</h2>
+      <button onclick="goToScreen('whoForScreen')">New Parcel Entry</button>
+      <button onclick="goToScreen('arrivalScreen')">Parcel Arrival</button>
+      <button onclick="goToScreen('returnStorageScreen')">Return to Storage</button>
+      <button onclick="goToScreen('returnCollectionScreen')">Return Collection</button>
+    </div>
+    <div id="whoForScreen" class="screen">
+      <h2>Who is the Parcel For?</h2>
+      <button onclick="goToScreen('eventEntryScreen')">Event</button>
+      <button onclick="goToScreen('guestParcelScreen')">Guest</button>
+      <button onclick="goToScreen('teamParcelScreen')">Team Department</button>
+      <button onclick="goToScreen('deptParcelScreen')">Hotel Dept Collection</button>
+      <button onclick="goToScreen('indexScreen')">Back</button>
+    </div>
+    <!-- Additional screens trimmed for brevity -->
+  </div>
+  <script>
+    function goToScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+    function submitForm(screenId) {
+      const data = { screen: screenId };
+      document.querySelectorAll(`#${screenId} input, #${screenId} select`).forEach(el => {
+        if (el.type === "file") return;
+        data[el.id] = el.value;
+      });
+      fetch("https://script.google.com/macros/s/AKfycbzlg2qVRQ9Ry1QBWdpjPUMX1DnFC78pNBlTHNTXDhaLSZhJwWwMqHD0NXn-VUP3y0KA/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.text())
+      .then(result => {
+        alert("Submitted successfully!\nResponse: " + result);
+        goToScreen("indexScreen");
+      })
+      .catch(error => {
+        alert("Submission failed: " + error);
+      });
+    }
+  </script>
+</body>
+</html>
