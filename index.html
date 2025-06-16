@@ -54,165 +54,157 @@
   <div class="container">
     <div id="loginScreen" class="screen active">
       <h2>Login</h2>
-      <input id="username" placeholder="Username" />
+      <input id="email" placeholder="Email" />
       <input type="password" id="password" placeholder="Password" />
-      <button onclick="goToScreen('indexScreen')">Login</button>
+      <button onclick="login()">Login</button>
     </div>
 
-    <div id="indexScreen" class="screen">
+    <div id="mainMenu" class="screen">
       <h2>Main Menu</h2>
-      <button onclick="goToScreen('whoForScreen')">New Parcel Entry</button>
-      <button onclick="goToScreen('arrivalScreen')">Parcel Arrival</button>
-      <button onclick="goToScreen('returnStorageScreen')">Return to Storage</button>
-      <button onclick="goToScreen('returnCollectionScreen')">Return Collection</button>
+      <div id="menuOptions"></div>
+      <button onclick="logout()">Logout</button>
     </div>
 
-    <div id="whoForScreen" class="screen">
-      <h2>Who is the Parcel For?</h2>
-      <button onclick="goToScreen('eventEntryScreen')">Event</button>
-      <button onclick="goToScreen('guestParcelScreen')">Guest</button>
-      <button onclick="goToScreen('teamParcelScreen')">Team Department</button>
-      <button onclick="goToScreen('deptParcelScreen')">Hotel Dept Collection</button>
-      <button onclick="goToScreen('indexScreen')">Back</button>
-    </div>
-
-    <!-- Event Entry Screen -->
-    <div id="eventEntryScreen" class="screen">
-      <h2>Event Parcel Entry</h2>
-      <input id="eventName" placeholder="Event Name" />
-      <input type="date" id="eventDate" />
-      <input id="clientName" placeholder="Client Contact Name" />
-      <input id="clientContact" placeholder="Client Phone Number" />
-      <input id="parcelCount" type="number" placeholder="Number of Parcels" />
-      <input id="parcelDescription" placeholder="Parcel Description" />
-      <input id="expectedDate" type="date" placeholder="Expected Delivery Date" />
-      <select id="returnPlanned" onchange="toggleReturnFields()">
-        <option value="">Return Planned?</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-      </select>
-      <div id="returnFields" style="display:none;">
-        <input type="date" id="collectionDate" placeholder="Expected Collection Date" />
-        <input id="courierName" placeholder="Courier Name" />
-        <input id="trackingDetails" placeholder="Tracking Details" />
-      </div>
-      <button onclick="submitForm('eventEntryScreen')">Submit</button>
-      <button onclick="goToScreen('whoForScreen')">Back</button>
-    </div>
-
-    <!-- Guest Parcel -->
-    <div id="guestParcelScreen" class="screen">
-      <h2>Guest Parcel</h2>
-      <input id="guestName" placeholder="Guest Name" />
-      <input type="date" id="guestArrivalDate" placeholder="Expected Arrival Date" />
-      <input id="guestParcelCount" type="number" placeholder="Number of Parcels" />
-      <input id="guestRoom" placeholder="Bedroom (if known)" />
-      <input id="guestLocation" placeholder="Location of Parcel" />
-      <input type="file" id="guestPhoto" />
-      <input id="guestCondition" placeholder="Condition" />
-      <button onclick="submitForm('guestParcelScreen')">Submit</button>
-      <button onclick="goToScreen('whoForScreen')">Back</button>
-    </div>
-
-    <!-- Team Parcel -->
-    <div id="teamParcelScreen" class="screen">
-      <h2>Team Department Parcel</h2>
-      <input id="teamMember" placeholder="Team Member Name" />
-      <input id="teamLocation" placeholder="Location of Parcel" />
-      <input type="file" id="teamPhoto" />
-      <input id="teamCourier" placeholder="Courier" />
-      <input id="teamTracking" placeholder="Tracking Details" />
-      <input id="hotelContact" placeholder="Hotel Contact" />
-      <button onclick="submitForm('teamParcelScreen')">Submit</button>
-      <button onclick="goToScreen('whoForScreen')">Back</button>
-    </div>
-
-    <!-- Department Collection -->
-    <div id="deptParcelScreen" class="screen">
-      <h2>Hotel Department Collection</h2>
-      <input id="sender" placeholder="Sender Name" />
-      <input id="sendingDept" placeholder="Sending Department" />
-      <input id="collectionLocation" placeholder="Parcel Location" />
-      <input type="file" id="deptPhoto" />
-      <input id="deptTracking" placeholder="Tracking Details" />
-      <button onclick="submitForm('deptParcelScreen')">Submit</button>
-      <button onclick="goToScreen('whoForScreen')">Back</button>
-    </div>
-
-    <!-- Parcel Arrival -->
-    <div id="arrivalScreen" class="screen">
-      <h2>Parcel Arrival</h2>
-      <input id="arrivalEventName" placeholder="Event Name" />
-      <input type="date" id="arrivalDate" />
-      <input id="arrivalStorage" placeholder="Storage Location" />
-      <input type="file" id="arrivalPhoto" />
-      <input id="receivedBy" placeholder="Received By" />
-      <button onclick="submitForm('arrivalScreen')">Submit</button>
-      <button onclick="goToScreen('indexScreen')">Back</button>
-    </div>
-
-    <!-- Return to Storage -->
-    <div id="returnStorageScreen" class="screen">
-      <h2>Return to Storage</h2>
-      <input id="returnEventName" placeholder="Event Name" />
-      <input type="date" id="returnDate" />
-      <input id="returnReason" placeholder="Reason for Return" />
-      <input id="returnStorageLocation" placeholder="Storage Location" />
-      <input type="file" id="returnPhoto" />
-      <input id="returnCondition" placeholder="Condition" />
-      <button onclick="submitForm('returnStorageScreen')">Submit</button>
-      <button onclick="goToScreen('indexScreen')">Back</button>
-    </div>
-
-    <!-- Return Collection -->
-    <div id="returnCollectionScreen" class="screen">
-      <h2>Return Collection</h2>
-      <input id="returnClient" placeholder="Client or Dept Name" />
-      <input type="date" id="collectionDateFinal" />
-      <input id="collectionLocationFinal" placeholder="Location" />
-      <input type="file" id="collectionPhoto" />
-      <input id="collectionCondition" placeholder="Condition" />
-      <button onclick="submitForm('returnCollectionScreen')">Submit</button>
-      <button onclick="goToScreen('indexScreen')">Back</button>
+    <div id="formScreen" class="screen">
+      <h2 id="formTitle">Form</h2>
+      <form id="dynamicForm"></form>
+      <button onclick="submitForm()">Submit</button>
+      <button onclick="goToScreen('mainMenu')">Back</button>
     </div>
   </div>
 
   <script>
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbyMyuXfYoOUNwb8clhFgIG1whyPW0QZ8CvbYTWLNwdWGvb0eBg5VQnJ5Jwi_WbHHBQe/exec";
+
+    let userRole = "";
+    let userEmail = "";
+
+    const screens = {
+      events: ["eventEntryScreen", "arrivalScreen", "returnStorageScreen", "returnCollectionScreen"],
+      reception: ["guestParcelScreen"],
+      porters: ["teamParcelScreen", "deptParcelScreen"]
+    };
+
     function goToScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const screen = document.getElementById(id);
-      if (screen) {{
-        screen.classList.add('active');
-      }} else {{
-        alert("Screen not found: " + id);
-      }}
+      document.getElementById(id).classList.add('active');
     }
 
-    function toggleReturnFields() {
-      const returnPlanned = document.getElementById("returnPlanned").value;
-      document.getElementById("returnFields").style.display = returnPlanned === "Yes" ? "block" : "none";
-    }
+    function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      if (!email || !password) return alert("Enter email and password.");
 
-    function submitForm(screenId) {
-      const data = { screen: screenId };
-      document.querySelectorAll(`#${screenId} input, #${screenId} select`).forEach(el => {
-        if (el.type === "file") return;
-        data[el.id] = el.value;
-      });
-
-      fetch("https://script.google.com/macros/s/AKfycbyMyuXfYoOUNwb8clhFgIG1whyPW0QZ8CvbYTWLNwdWGvb0eBg5VQnJ5Jwi_WbHHBQe/exec", {
+      fetch(scriptUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+        body: JSON.stringify({ screen: "login", email, password }),
+        headers: { "Content-Type": "application/json" }
       })
-      .then(response => response.text())
-      .then(result => {
-        alert("Submitted successfully!\nResponse: " + result);
-        goToScreen("indexScreen");
-      })
-      .catch(error => {
-        alert("Submission failed: " + error);
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === "success") {
+          userRole = res.role;
+          userEmail = email;
+          showMainMenu();
+        } else {
+          alert("Login failed");
+        }
       });
+    }
+
+    function showMainMenu() {
+      const menu = document.getElementById("menuOptions");
+      menu.innerHTML = "";
+      const allowedScreens = screens[userRole] || [];
+
+      allowedScreens.forEach(screen => {
+        const btn = document.createElement("button");
+        btn.textContent = screen;
+        btn.onclick = () => loadForm(screen);
+        menu.appendChild(btn);
+      });
+
+      goToScreen("mainMenu");
+    }
+
+    function logout() {
+      userRole = "";
+      userEmail = "";
+      goToScreen("loginScreen");
+    }
+
+    function loadForm(screenName) {
+      const form = document.getElementById("dynamicForm");
+      form.innerHTML = "";
+      document.getElementById("formTitle").textContent = screenName;
+      form.dataset.screen = screenName;
+
+      const fields = {
+        eventEntryScreen: ["eventName", "eventDate", "clientName", "clientContact", "parcelCount", "parcelDescription", "expectedDate", "returnPlanned", "collectionDate", "courierName", "trackingDetails"],
+        guestParcelScreen: ["guestName", "guestArrivalDate", "guestParcelCount", "guestRoom", "guestLocation", "guestCondition"],
+        teamParcelScreen: ["teamMember", "teamLocation", "teamCourier", "teamTracking", "hotelContact"],
+        deptParcelScreen: ["sender", "sendingDept", "collectionLocation", "deptTracking"],
+        arrivalScreen: ["arrivalEventName", "arrivalDate", "arrivalStorage", "receivedBy"],
+        returnStorageScreen: ["returnEventName", "returnDate", "returnReason", "returnStorageLocation", "returnCondition"],
+        returnCollectionScreen: ["returnClient", "collectionDateFinal", "collectionLocationFinal", "collectionCondition"]
+      };
+
+      (fields[screenName] || []).forEach(id => {
+        const input = document.createElement("input");
+        input.placeholder = id;
+        input.id = id;
+        form.appendChild(input);
+      });
+
+      const image = document.createElement("input");
+      image.type = "file";
+      image.id = "imageData";
+      form.appendChild(image);
+
+      const notify = document.createElement("input");
+      notify.placeholder = "Notify Email (optional)";
+      notify.id = "notify";
+      form.appendChild(notify);
+
+      goToScreen("formScreen");
+    }
+
+    function submitForm() {
+      const form = document.getElementById("dynamicForm");
+      const screen = form.dataset.screen;
+      const data = { screen, email: userEmail };
+      const inputs = form.querySelectorAll("input");
+
+      inputs.forEach(input => {
+        if (input.type === "file" && input.files.length > 0) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            data.imageData = reader.result.split(",")[1];
+            postForm(data);
+          };
+          reader.readAsDataURL(input.files[0]);
+        } else {
+          data[input.id] = input.value;
+        }
+      });
+
+      if (!inputs.length || !Array.from(inputs).some(i => i.type === "file" && i.files.length > 0)) {
+        postForm(data);
+      }
+    }
+
+    function postForm(data) {
+      fetch(scriptUrl, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(r => r.text())
+      .then(resp => {
+        alert("Submitted: " + resp);
+        goToScreen("mainMenu");
+      })
+      .catch(err => alert("Error: " + err));
     }
   </script>
 </body>
